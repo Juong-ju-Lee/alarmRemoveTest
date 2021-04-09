@@ -6,17 +6,33 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
+
+    private ArrayList<AlarmList> arrayList;
+    private AlarmAdapter alarmAdapter;
+    private RecyclerView recyclerView;
+    private LinearLayoutManager linearLayoutManager;
+
+
+
+
+
+
     private AlarmManager alarmManager;
     private TimePicker timePicker;
     private PendingIntent pendingIntent;
@@ -31,6 +47,33 @@ public class MainActivity extends AppCompatActivity {
 
         findViewById(R.id.btnStart).setOnClickListener(mClickListener);
         findViewById(R.id.btnStop).setOnClickListener(mClickListener);
+
+
+
+
+
+        /*알람 리스트 생성*/
+
+        recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
+        linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        arrayList = new ArrayList<>();
+
+        alarmAdapter = new AlarmAdapter(arrayList);
+        recyclerView.setAdapter(alarmAdapter);
+
+        Button btnAdd = (Button)findViewById(R.id.btnAdd);
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlarmList alarmList = new AlarmList(R.mipmap.ic_launcher,"알람이름1","알람시간");
+                arrayList.add(alarmList);
+                alarmAdapter.notifyDataSetChanged();
+            }
+        });
+
+
 
     }
 
@@ -86,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     View.OnClickListener mClickListener = new View.OnClickListener() {
+        @RequiresApi(api = Build.VERSION_CODES.M)
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
