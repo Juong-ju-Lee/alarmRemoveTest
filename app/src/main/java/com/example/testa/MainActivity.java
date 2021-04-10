@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewDebug;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TimePicker;
@@ -19,7 +20,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    int count =0;
 
 
     private AlarmManager alarmManager;
@@ -45,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         this.alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         this.timePicker = findViewById(R.id.timePicker);
 
-        findViewById(R.id.btnStart).setOnClickListener(mClickListener);
+        findViewById(R.id.btnAdd).setOnClickListener(mClickListener);
         findViewById(R.id.btnStop).setOnClickListener(mClickListener);
 
 
@@ -62,18 +66,6 @@ public class MainActivity extends AppCompatActivity {
 
         alarmAdapter = new AlarmAdapter(arrayList);
         recyclerView.setAdapter(alarmAdapter);
-
-        Button btnAdd = (Button)findViewById(R.id.btnAdd);
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlarmList alarmList = new AlarmList(R.mipmap.ic_launcher,"알람이름1","알람시간");
-                arrayList.add(alarmList);
-                alarmAdapter.notifyDataSetChanged();
-            }
-        });
-
-
 
     }
 
@@ -108,6 +100,18 @@ public class MainActivity extends AppCompatActivity {
         // Toast 보여주기 (알람 시간 표시)
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         Toast.makeText(this, "Alarm : " + format.format(calendar.getTime()), Toast.LENGTH_SHORT).show();
+        String alarmDate =format.format(calendar.getTime());
+
+
+
+        /*알람 리스트 생성*/
+               count++;
+               // 현재시간을 받아옴
+               // long now = System.currentTimeMillis();
+               // Date mDate = new Date(now);
+               AlarmList alarmList = new AlarmList(R.mipmap.ic_launcher, "알람"+count, ""+alarmDate);
+               arrayList.add(alarmList);
+               alarmAdapter.notifyDataSetChanged();
     }
 
     /* 알람 중지 */
@@ -128,24 +132,27 @@ public class MainActivity extends AppCompatActivity {
         this.pendingIntent = null;
     }
 
+
+
     View.OnClickListener mClickListener = new View.OnClickListener() {
         @RequiresApi(api = Build.VERSION_CODES.M)
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.btnStart:
+                case R.id.btnAdd:
                     // 알람 시작
                     start();
-
                     break;
+
                 case R.id.btnStop:
                     // 알람 중지
                     stop();
-
                     break;
             }
+
         }
     };
+
 
 
 }
