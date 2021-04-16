@@ -48,11 +48,19 @@ public class AlarmService extends Service {
             this.mediaPlayer = MediaPlayer.create(this, R.raw.alarm);
             this.mediaPlayer.start();
 
+            //알람음을 반복재생한다.
+            this.mediaPlayer.setLooping(true);
+
             this.isRunning = true;
 
             Log.d("AlarmService", "Alarm Start");
         } else if (this.isRunning & state.equals("off")) {
             // 알람음 재생 ON, 알람음 중지 상태
+
+            //알람음 반복재생중지.
+            //this.mediaPlayer.setLooping(false);
+
+
             this.mediaPlayer.stop();
             this.mediaPlayer.reset();
             this.mediaPlayer.release();

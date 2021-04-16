@@ -5,10 +5,9 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewDebug;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -20,18 +19,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
+
+import static java.sql.DriverManager.println;
 
 
 public class MainActivity extends AppCompatActivity {
+    //수정코드//수정코드//수정코드//수정코드//수정코드
+    GestureDetector detector;
+    //수정코드//수정코드//수정코드//수정코드//수정코드
+
+
 
     private ArrayList<AlarmList> arrayList;
     private AlarmAdapter alarmAdapter;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
-
-
 
 
     int count =0;
@@ -67,7 +70,66 @@ public class MainActivity extends AppCompatActivity {
         alarmAdapter = new AlarmAdapter(arrayList);
         recyclerView.setAdapter(alarmAdapter);
 
+
+
+
+
+
+
+
+
+//수정코드//수정코드//수정코드//수정코드//수정코드//수정코드
+
+detector = new GestureDetector(this, new GestureDetector.OnGestureListener() {
+
+    @Override
+    public boolean onDown(MotionEvent motionEvent) {
+        return false;
     }
+
+    @Override
+    public void onShowPress(MotionEvent motionEvent) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent motionEvent) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        return false;
+    }
+
+    public void onLongPress(MotionEvent motionEvent) {
+                stop();
+                alarmAdapter.remove(AlarmAdapter.CustomViewHolder.position);
+            }
+
+    @Override
+    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        return false;
+    }
+
+});
+
+        View view2 = findViewById(R.id.recyclerView);
+
+        view2.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent motionEvent) {
+                detector.onTouchEvent(motionEvent);
+                return true;
+            }
+        });
+
+
+
+//수정코드//수정코드//수정코드//수정코드//수정코드
+
+    }
+
 
 
 
@@ -105,17 +167,26 @@ public class MainActivity extends AppCompatActivity {
 
 
         /*알람 리스트 생성*/
-               count++;
-               // 현재시간을 받아옴
-               // long now = System.currentTimeMillis();
-               // Date mDate = new Date(now);
-               AlarmList alarmList = new AlarmList(R.mipmap.ic_launcher, "알람"+count, ""+alarmDate);
-               arrayList.add(alarmList);
-               alarmAdapter.notifyDataSetChanged();
+        count++;
+        // 현재시간을 받아옴
+        // long now = System.currentTimeMillis();
+        // Date mDate = new Date(now);
+        AlarmList alarmList = new AlarmList(R.mipmap.ic_launcher, "알람"+count, ""+alarmDate);
+        arrayList.add(alarmList);
+        alarmAdapter.notifyDataSetChanged();
     }
 
-    /* 알람 중지 */
-    private void stop() {
+
+
+
+
+
+
+
+
+
+//수정코드 알람중지
+public void stop() {
         if (this.pendingIntent == null) {
             return;
         }
@@ -134,6 +205,32 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
+
+
+
+
+
+    /* 알람 중지
+
+    private void stop() {
+        if (this.pendingIntent == null) {
+            return;
+        }
+
+        // 알람 취소
+        this.alarmManager.cancel(this.pendingIntent);
+
+        // 알람 중지 Broadcast
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        intent.putExtra("state","off");
+
+        sendBroadcast(intent);
+
+        this.pendingIntent = null;
+    }
+  */
     View.OnClickListener mClickListener = new View.OnClickListener() {
         @RequiresApi(api = Build.VERSION_CODES.M)
         @Override

@@ -1,5 +1,6 @@
 package com.example.testa;
 
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,11 +9,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.testa.AlarmList;
+import com.example.testa.MainActivity;
+import com.example.testa.R;
 
 import java.util.ArrayList;
 
 public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.CustomViewHolder> {
+
+
+    //수정코드
+   // MainActivity m = new MainActivity();
+    //수정코드
+
+
 
     private ArrayList<AlarmList>arrayList;
 
@@ -35,6 +48,15 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.CustomViewHo
         holder.alarmContent.setText(arrayList.get(position).getAlarmContent());
 
         holder.itemView.setTag(position);
+
+
+
+
+
+
+
+
+        /*
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,11 +68,18 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.CustomViewHo
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                remove(holder.getAdapterPosition());
+
+               remove(holder.getAdapterPosition());
                 return true;
             }
         });
+*/
+
+
     }
+
+
+
 
     @Override
     public int getItemCount() {
@@ -58,16 +87,17 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.CustomViewHo
     }
 
 
-    public void remove(int position){
-        try{
-            arrayList.remove(position);
-            notifyItemRemoved(position);
-        }catch (IndexOutOfBoundsException e){
-            e.printStackTrace();
+        public void remove(int position){
+            try{
+                arrayList.remove(position);
+                notifyItemRemoved(position);
+            }catch (IndexOutOfBoundsException e){
+                e.printStackTrace();
+            }
         }
-    }
 
-    public class CustomViewHolder extends RecyclerView.ViewHolder {
+    public static class CustomViewHolder extends RecyclerView.ViewHolder {
+        public static int position;
         protected ImageView alarmImg;
         protected TextView alarmName;
         protected TextView alarmContent;
